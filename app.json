@@ -21,10 +21,17 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "site.yopaaa.app.digitalClock"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "2e8aa09d-faa0-475d-ae6a-f50df1d1ec14"
+      }
+    },
+    "owner": "torvaldsdev"
   }
 }
