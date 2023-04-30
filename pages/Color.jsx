@@ -117,7 +117,9 @@ const Color = () => {
   useEffect(() => {
     const loadIp = async () => {
       await loadIpAddress()
-      handlePing()
+      setTimeout(() => {
+        handlePing()
+      }, 1000)
     }
     loadIp()
   }, [])
