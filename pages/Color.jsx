@@ -7,6 +7,7 @@ import MyButton from './components/MyButton'
 import axios from 'axios'
 import Slider from '@react-native-community/slider'
 import HorizontalColorPicker from './components/HorizontalColorPicker'
+import alertJson from './function/alertJson'
 
 const Color = () => {
   const [ipAddress, setIpAddress] = useState('')
@@ -32,9 +33,7 @@ const Color = () => {
     }
   }
 
-  const handleChangeColor = async () => {
-    await loadIpAddress()
-
+  const handleChangeColor = () => {
     let hex = existColor
     hex = hex.replace('#', '')
 
@@ -54,7 +53,7 @@ const Color = () => {
 
           try {
             await AsyncStorage.setItem('palette', JSON.stringify(palette))
-            alert(JSON.stringify(val.data.payload))
+            alertJson('Success', val.data.payload)
             loadPalette()
           } catch (error) {
             console.error(error)
@@ -63,7 +62,7 @@ const Color = () => {
       })
       .catch((er) => {
         console.log(er.message)
-        alert(`failed to send request http://${ipAddress}/\n` + er.message)
+        alertJson('Failed', `failed to send request http://${ipAddress}/\n` + er.message)
       })
   }
 

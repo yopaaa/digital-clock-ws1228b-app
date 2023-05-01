@@ -1,10 +1,11 @@
-import { StyleSheet, Text, View, TextInput, ScrollView, Alert } from 'react-native'
+import { StyleSheet, Text, View, TextInput, ScrollView } from 'react-native'
 import { useEffect, useState } from 'react'
 import NetInfo from '@react-native-community/netinfo'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import vars from './components/Vars'
 import MyButton from './components/MyButton'
 import axios from 'axios'
+import alertJson from './function/alertJson'
 
 const Setting = () => {
   const [netinfo, setnetinfo] = useState('')
@@ -39,20 +40,7 @@ const Setting = () => {
         alert(`failed to send request http://${ipAddress}/\n` + er.message)
       })
   }
-  const alertJson = (title = 'alert', object = {}) => {
-    return Alert.alert(
-      title,
-      JSON.stringify(object, null, 5),
-      [
-        {
-          text: 'OK'
-        }
-      ],
-      {
-        cancelable: true
-      }
-    )
-  }
+
   const handlePing = () => {
     axios
       .get(`http://${ipAddress}:3000/ping`)
@@ -78,7 +66,6 @@ const Setting = () => {
             setIpAddress(val)
             try {
               await AsyncStorage.setItem('ipAddress', val)
-              console.log(`IP address saved successfully : ${val}`)
             } catch (error) {
               console.error(error)
             }
@@ -88,28 +75,20 @@ const Setting = () => {
         <MyButton title={'ping'} textStyle={{ fontSize: 10 }} btnStyle={styles.inputIpBtn} onPress={handlePing} />
       </View>
 
-      <ScrollView
-        style={{
-          borderWidth: 1,
-          padding: 15,
-          flex: 1,
-          borderRadius: 30,
-          margin: 10
-        }}
-        showsVerticalScrollIndicator={false}
-      >
+      <ScrollView style={styles.scrollViewContainer} showsVerticalScrollIndicator={false}>
         <Text>Setting</Text>
 
         <MyButton
           title="Restart"
           onPress={handleRestart}
-          btnStyle={{ marginTop: 50, backgroundColor: 'red' }}
+          btnStyle={{ margin: 15, backgroundColor: 'red' }}
           textStyle={{ fontWeight: 'bold', color: 'black' }}
         />
 
         <MyButton
           title="Net info"
           btnStyle={{ margin: 15, backgroundColor: 'blue' }}
+          textStyle={{ fontWeight: 'bold', color: 'white' }}
           onPress={() => alertJson('Network information', netinfo)}
         />
       </ScrollView>
@@ -122,6 +101,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 50
+  },
+  scrollViewContainer: {
+    borderWidth: 1,
+    padding: 15,
+    flex: 1,
+    borderRadius: 30,
+    margin: 10,
+    marginTop: 30,
+    backgroundColor: vars.color.four
   },
   inputIp: {
     borderColor: 'gray',

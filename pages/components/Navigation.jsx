@@ -3,10 +3,10 @@ import { useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import vars from './Vars'
 
-const Navigation = () => {
+const Navigation = (props) => {
+  const { pageList = [], defaultPage } = props
   const navigation = useNavigation()
-  const [page, setpage] = useState('Color')
-  const pageList = ['Color', 'Mode', 'Setting']
+  const [page, setpage] = useState(defaultPage)
 
   return (
     <View style={styles.container}>
@@ -46,9 +46,7 @@ const styles = StyleSheet.create({
     padding: 20
   },
   existPage: {
-    // backgroundColor: vars.color.two,
     backgroundColor: vars.color.one,
-
     borderRadius: 20
   }
 })

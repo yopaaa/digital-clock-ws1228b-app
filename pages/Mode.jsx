@@ -8,7 +8,6 @@ import SelectDropdown from 'react-native-select-dropdown'
 
 const Color = () => {
   const [ipAddress, setIpAddress] = useState('')
-  const [palette, setpalette] = useState(['#f26522'])
 
   const [colorMode, setcolorMode] = useState('solid')
   const colorModeList = ['solid', 'random']
@@ -98,6 +97,10 @@ const Color = () => {
       <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around', marginTop: 20, marginBottom: 50 }}>
         <SelectDropdown
           defaultValue={colorMode}
+          renderDropdownIcon={(isOpened) => {
+            return <Text>$</Text>
+          }}
+          dropdownIconPosition={'right'}
           defaultButtonText={colorMode}
           buttonStyle={{ borderWidth: 1, borderRadius: 10, width: 150 }}
           buttonTextStyle={{ fontSize: 15, fontWeight: 'bold' }}

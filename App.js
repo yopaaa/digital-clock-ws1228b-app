@@ -10,6 +10,8 @@ import Mode from './pages/Mode'
 const Stack = createNativeStackNavigator()
 
 export default function App() {
+  const pageList = ['Color', 'Mode', 'Setting']
+
   return (
     <NavigationContainer>
       <Stack.Navigator>
@@ -21,7 +23,7 @@ export default function App() {
       </Stack.Navigator>
 
       <View style={{ backgroundColor: vars.color.four }}>
-        <Navigation />
+        <Navigation pageList={pageList} defaultPage={'Color'} />
       </View>
     </NavigationContainer>
   )
