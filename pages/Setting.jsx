@@ -1,11 +1,10 @@
-import { StyleSheet, Text, View, TextInput, ScrollView } from 'react-native'
+import { StyleSheet, Text, View, TextInput, ScrollView, Alert } from 'react-native'
 import { useEffect, useState } from 'react'
 import NetInfo from '@react-native-community/netinfo'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import vars from './components/Vars'
 import MyButton from './components/MyButton'
 import axios from 'axios'
-// import ConnectWifi from './ConnectWifi'
 
 const Setting = () => {
   const [netinfo, setnetinfo] = useState('')
@@ -40,26 +39,31 @@ const Setting = () => {
         alert(`failed to send request http://${ipAddress}/\n` + er.message)
       })
   }
+  const alertJson = (title = 'alert', object = {}) => {
+    return Alert.alert(
+      title,
+      JSON.stringify(object, null, 5),
+      [
+        {
+          text: 'OK'
+        }
+      ],
+      {
+        cancelable: true
+      }
+    )
+  }
   const handlePing = () => {
     axios
       .get(`http://${ipAddress}:3000/ping`)
-      .then((val) => {
-        alert(`Success to send request \nhttp://${ipAddress}/\n`)
-      })
-      .catch((er) => {
-        console.log(er)
-        alert(`failed to send request \nhttp://${ipAddress}/\n` + er.message)
-      })
+      .then((val) => alertJson('Success', val.data))
+      .catch((er) => alertJson('Failed', er.message))
   }
 
   useEffect(() => {
     loadIpAddress()
 
-    NetInfo.fetch().then((state) => {
-      console.log(state)
-      setnetinfo(JSON.stringify(state))
-      console.log(netinfo)
-    })
+    NetInfo.fetch().then((state) => setnetinfo(state))
   }, [])
 
   return (
@@ -95,13 +99,19 @@ const Setting = () => {
         showsVerticalScrollIndicator={false}
       >
         <Text>Setting</Text>
+
         <MyButton
           title="Restart"
           onPress={handleRestart}
           btnStyle={{ marginTop: 50, backgroundColor: 'red' }}
           textStyle={{ fontWeight: 'bold', color: 'black' }}
         />
-        {/* <Text>{netinfo}</Text> */}
+
+        <MyButton
+          title="Net info"
+          btnStyle={{ margin: 15, backgroundColor: 'blue' }}
+          onPress={() => alertJson('Network information', netinfo)}
+        />
       </ScrollView>
     </View>
   )
@@ -109,7 +119,6 @@ const Setting = () => {
 
 const styles = StyleSheet.create({
   inputIpContainer: {
-    // flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 50
