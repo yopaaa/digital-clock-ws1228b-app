@@ -6,25 +6,17 @@ import vars from './components/Vars'
 import MyButton from './components/MyButton'
 import axios from 'axios'
 import alertJson from './function/alertJson'
+import Loading from './components/Loading'
+import loadIpAddress from './function/loadIpAddress'
 
 const Setting = () => {
   const [netinfo, setnetinfo] = useState('')
-
+  const [isLoading, setisLoading] = useState(false)
   const [ipAddress, setIpAddress] = useState('')
   vars.ipAddress = ipAddress
 
-  const loadIpAddress = async () => {
-    try {
-      const ipAddress = await AsyncStorage.getItem('ipAddress')
-      if (ipAddress !== null) {
-        setIpAddress(ipAddress)
-      }
-    } catch (error) {
-      console.error(error)
-    }
-  }
-
   const handleRestart = () => {
+    setisLoading(true)
     const data = {
       temp: 'temp data'
     }
@@ -39,23 +31,41 @@ const Setting = () => {
         console.log(er)
         alert(`failed to send request http://${ipAddress}/\n` + er.message)
       })
+      .finally(() => setisLoading(false))
   }
 
   const handlePing = () => {
+    setisLoading(true)
     axios
       .get(`http://${ipAddress}:3000/ping`)
       .then((val) => alertJson('Success', val.data))
       .catch((er) => alertJson('Failed', er.message))
+      .finally(() => setisLoading(false))
+  }
+
+  const handleVariable = () => {
+    setisLoading(true)
+    axios
+      .get(`http://${ipAddress}:3000/variable`)
+      .then((val) => alertJson('Success', val.data))
+      .catch((er) => alertJson('Failed', er.message))
+      .finally(() => setisLoading(false))
   }
 
   useEffect(() => {
-    loadIpAddress()
+    const loadIp = async () => {
+      const ip = await loadIpAddress()
+      setIpAddress(ip)
+    }
+    loadIp()
 
     NetInfo.fetch().then((state) => setnetinfo(state))
   }, [])
 
   return (
     <View style={{ flex: 1, backgroundColor: vars.color.four }}>
+      <Loading display={isLoading} style={{ marginTop: 30 }} />
+
       <View style={styles.inputIpContainer}>
         <Text>Click to set target IP address:</Text>
         <TextInput
@@ -83,6 +93,13 @@ const Setting = () => {
           onPress={handleRestart}
           btnStyle={{ margin: 15, backgroundColor: 'red' }}
           textStyle={{ fontWeight: 'bold', color: 'black' }}
+        />
+
+        <MyButton
+          title="Variable"
+          btnStyle={{ margin: 15, backgroundColor: 'blue' }}
+          textStyle={{ fontWeight: 'bold', color: 'white' }}
+          onPress={handleVariable}
         />
 
         <MyButton

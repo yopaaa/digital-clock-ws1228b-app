@@ -8,21 +8,16 @@ import axios from 'axios'
 import Slider from '@react-native-community/slider'
 import HorizontalColorPicker from './components/HorizontalColorPicker'
 import alertJson from './function/alertJson'
+import Loading from './components/Loading'
+import loadIpAddress from './function/loadIpAddress'
 
 const Color = () => {
   const [ipAddress, setIpAddress] = useState('')
+  const [isLoading, setisLoading] = useState(false)
+
   const [brightness, setbrightness] = useState(130)
   const [palette, setpalette] = useState(['#f26522'])
   const [existColor, setexistColor] = useState(palette[0])
-
-  const loadIpAddress = async () => {
-    try {
-      const ipAddress = await AsyncStorage.getItem('ipAddress')
-      if (ipAddress !== null) setIpAddress(ipAddress)
-    } catch (error) {
-      console.error(error)
-    }
-  }
 
   const loadPalette = async () => {
     try {
@@ -33,7 +28,13 @@ const Color = () => {
     }
   }
 
-  const handleChangeColor = () => {
+  const handleChangeColor = async () => {
+    setisLoading(true)
+    if (!ipAddress) {
+      const ip = await loadIpAddress()
+      setIpAddress(ip)
+    }
+
     let hex = existColor
     hex = hex.replace('#', '')
 
@@ -64,59 +65,74 @@ const Color = () => {
         console.log(er.message)
         alertJson('Failed', `failed to send request http://${ipAddress}/\n` + er.message)
       })
+      .finally(() => {
+        setisLoading(false)
+      })
   }
 
   useEffect(() => {
     const loadIp = async () => {
-      await loadIpAddress()
+      const ip = await loadIpAddress()
+      setIpAddress(ip)
       await loadPalette()
     }
     loadIp()
   }, [])
 
   return (
-    <ScrollView style={styles.scrollViewContainer} showsVerticalScrollIndicator={false}>
-      <View>
-        <ColorPicker
-          swatches={false}
-          ref={(r) => (this.picker = r)}
-          color={existColor}
-          onColorChangeComplete={(color) => setexistColor(color)}
-          thumbSize={30}
-          sliderSize={30}
-        />
+    <View style={styles.container}>
+      <Loading display={isLoading} />
+      <ScrollView style={styles.scrollViewContainer} showsVerticalScrollIndicator={false}>
+        <View>
+          <ColorPicker
+            swatches={false}
+            ref={(r) => (this.picker = r)}
+            color={existColor}
+            onColorChangeComplete={(color) => setexistColor(color)}
+            thumbSize={30}
+            sliderSize={30}
+          />
 
-        <HorizontalColorPicker colorList={palette} onSelectColor={(color) => setexistColor(color)} />
+          <HorizontalColorPicker colorList={palette} onSelectColor={(color) => setexistColor(color)} />
 
-        <View style={styles.colorInformation}>
-          <Text>color : {existColor}</Text>
-          <Text>brightness : {`${Math.round(brightness / 2.5)}%`}</Text>
+          <View style={styles.colorInformation}>
+            <Text>color : {existColor}</Text>
+            <Text>brightness : {`${Math.round(brightness / 2.5)}%`}</Text>
+          </View>
+
+          <Slider
+            style={{ width: '100%', height: 20 }}
+            value={brightness}
+            minimumValue={0}
+            maximumValue={250}
+            minimumTrackTintColor="#FFFFFF"
+            maximumTrackTintColor="#000000"
+            onValueChange={(val) => setbrightness(Math.round(val))}
+          />
+
+          <MyButton title="Set color" onPress={handleChangeColor} btnStyle={{ marginTop: 20 }} />
         </View>
-
-        <Slider
-          style={{ width: '100%', height: 20 }}
-          value={brightness}
-          minimumValue={0}
-          maximumValue={250}
-          minimumTrackTintColor="#FFFFFF"
-          maximumTrackTintColor="#000000"
-          onValueChange={(val) => setbrightness(Math.round(val))}
-        />
-
-        <MyButton title="Set color" onPress={handleChangeColor} btnStyle={{ marginTop: 20 }} />
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   )
 }
 
 const styles = StyleSheet.create({
+  container: {
+    borderRadius: 30,
+    overflow: 'hidden',
+    height: '95%',
+    // backgroundColor: 'blue',
+    margin: 10,
+    marginTop: 30
+  },
   scrollViewContainer: {
     borderWidth: 1,
     padding: 15,
     flex: 1,
     borderRadius: 30,
-    margin: 10,
-    marginTop: 30,
+    // margin: 10,
+    // marginTop: 30,
     backgroundColor: vars.color.four
   },
   colorInformation: {
