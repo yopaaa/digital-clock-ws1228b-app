@@ -1,14 +1,14 @@
 import { TouchableOpacity, Text } from 'react-native'
 import vars from './Vars'
 
-export default function MyButton(props) {
+export default function MyButton({ btnStyle, textStyle, onPress, title }) {
   const defaultBtnStyle = {
     backgroundColor: vars.color.two,
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 10
   }
-  const btnStyle = { ...defaultBtnStyle, ...props.btnStyle }
+  const btnStyles = { ...defaultBtnStyle, ...btnStyle }
 
   const defaultTextStyle = {
     color: vars.color.four,
@@ -16,11 +16,11 @@ export default function MyButton(props) {
     textAlign: 'center',
     textTransform: 'capitalize'
   }
-  const textStyle = { ...defaultTextStyle, ...props.textStyle }
+  const textStyles = { ...defaultTextStyle, ...textStyle }
 
   return (
-    <TouchableOpacity style={btnStyle} onPress={props.onPress}>
-      <Text style={textStyle}>{props.title}</Text>
+    <TouchableOpacity style={btnStyles} onPress={onPress}>
+      <Text style={textStyles}>{title}</Text>
     </TouchableOpacity>
   )
 }

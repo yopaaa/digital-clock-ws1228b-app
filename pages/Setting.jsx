@@ -13,7 +13,6 @@ const Setting = () => {
   const [netinfo, setnetinfo] = useState('')
   const [isLoading, setisLoading] = useState(false)
   const [ipAddress, setIpAddress] = useState('')
-  vars.ipAddress = ipAddress
 
   const handleRestart = () => {
     setisLoading(true)
@@ -47,6 +46,15 @@ const Setting = () => {
     setisLoading(true)
     axios
       .get(`http://${ipAddress}:3000/variable`)
+      .then((val) => alertJson('Success', val.data))
+      .catch((er) => alertJson('Failed', er.message))
+      .finally(() => setisLoading(false))
+  }
+
+  const handleIsInternetConnection = () => {
+    setisLoading(true)
+    axios
+      .get(`http://${ipAddress}:3000/isInternetConnection`)
       .then((val) => alertJson('Success', val.data))
       .catch((er) => alertJson('Failed', er.message))
       .finally(() => setisLoading(false))
@@ -86,7 +94,26 @@ const Setting = () => {
       </View>
 
       <ScrollView style={styles.scrollViewContainer} showsVerticalScrollIndicator={false}>
-        <Text>Setting</Text>
+        <MyButton
+          title="Variable"
+          btnStyle={{ margin: 10 }}
+          textStyle={{ fontWeight: 'bold', color: 'white' }}
+          onPress={handleVariable}
+        />
+
+        <MyButton
+          title="Test connections"
+          btnStyle={{ margin: 10 }}
+          textStyle={{ fontWeight: 'bold', color: 'white' }}
+          onPress={handleIsInternetConnection}
+        />
+
+        <MyButton
+          title="Net info"
+          btnStyle={{ margin: 10 }}
+          textStyle={{ fontWeight: 'bold', color: 'white' }}
+          onPress={() => alertJson('Network information', netinfo)}
+        />
 
         <MyButton
           title="Restart"
@@ -95,19 +122,7 @@ const Setting = () => {
           textStyle={{ fontWeight: 'bold', color: 'black' }}
         />
 
-        <MyButton
-          title="Variable"
-          btnStyle={{ margin: 15, backgroundColor: 'blue' }}
-          textStyle={{ fontWeight: 'bold', color: 'white' }}
-          onPress={handleVariable}
-        />
-
-        <MyButton
-          title="Net info"
-          btnStyle={{ margin: 15, backgroundColor: 'blue' }}
-          textStyle={{ fontWeight: 'bold', color: 'white' }}
-          onPress={() => alertJson('Network information', netinfo)}
-        />
+        <View style={{ marginTop: 50 }}>{/* {BLANK} */}</View>
       </ScrollView>
     </View>
   )
@@ -125,7 +140,7 @@ const styles = StyleSheet.create({
     flex: 1,
     borderRadius: 30,
     margin: 10,
-    marginTop: 30,
+    marginTop: 20,
     backgroundColor: vars.color.four
   },
   inputIp: {
