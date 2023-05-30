@@ -1,4 +1,4 @@
-import { Text, StyleSheet, View, TouchableOpacity } from 'react-native'
+import { StyleSheet, View, TouchableOpacity, Image } from 'react-native'
 import { useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import vars from './Vars'
@@ -11,6 +11,11 @@ const Navigation = (props) => {
   return (
     <View style={styles.container}>
       {pageList.map((val) => {
+        const imageSrc = {
+          Color: require('../../assets/Color-icon.png'),
+          Customize: require('../../assets/Customize-icon.png'),
+          Setting: require('../../assets/Setting-icon.png')
+        }
         return (
           <TouchableOpacity
             key={val}
@@ -20,7 +25,12 @@ const Navigation = (props) => {
               navigation.navigate(val)
             }}
           >
-            <Text style={styles.navText}>{val}</Text>
+            {/* <Text style={styles.navText}>{val}</Text> */}
+            <Image
+              // source={{ uri: 'assets:/icon.png' }}
+              source={imageSrc[val]}
+              style={{ width: 40, height: 40 }}
+            />
           </TouchableOpacity>
         )
       })}
@@ -30,13 +40,14 @@ const Navigation = (props) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: vars.color.tree,
+    backgroundColor: '#A2A2B5',
     justifyContent: 'space-around',
     alignItems: 'center',
     flexDirection: 'row',
     height: 80,
     borderRadius: 20,
-    margin: 10
+    margin: 20,
+    marginTop: 0
   },
   navText: {
     color: vars.color.four,
