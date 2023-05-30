@@ -2,7 +2,6 @@ import { StyleSheet, Text, View, TextInput, ScrollView } from 'react-native'
 import { useEffect, useState } from 'react'
 import NetInfo from '@react-native-community/netinfo'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import vars from './components/Vars'
 import MyButton from './components/MyButton'
 import axios from 'axios'
 import alertJson from './function/alertJson'
@@ -71,11 +70,11 @@ const Setting = () => {
   }, [])
 
   return (
-    <View style={{ flex: 1, backgroundColor: vars.color.four }}>
+    <View style={{ flex: 1, backgroundColor: '#1C1C23' }}>
       <Loading display={isLoading} style={{ marginTop: 30 }} />
 
       <View style={styles.inputIpContainer}>
-        <Text>Click to set target IP address:</Text>
+        <Text style={{ color: 'white' }}>Click to set target IP address:</Text>
         <TextInput
           style={styles.inputIp}
           placeholder="IP address"
@@ -90,27 +89,27 @@ const Setting = () => {
           }}
           keyboardType="number-pad"
         />
-        <MyButton title={'ping'} textStyle={{ fontSize: 10 }} btnStyle={styles.inputIpBtn} onPress={handlePing} />
+        <MyButton title={'ping'} textStyle={{ fontSize: 11, color: 'white' }} btnStyle={styles.inputIpBtn} onPress={handlePing} />
       </View>
 
       <ScrollView style={styles.scrollViewContainer} showsVerticalScrollIndicator={false}>
         <MyButton
           title="Variable"
-          btnStyle={{ margin: 10 }}
+          btnStyle={{ margin: 10, borderWidth: 1, borderColor: '#CFCFFC' }}
           textStyle={{ fontWeight: 'bold', color: 'white' }}
           onPress={handleVariable}
         />
 
         <MyButton
           title="Test connections"
-          btnStyle={{ margin: 10 }}
+          btnStyle={{ margin: 10, borderWidth: 1, borderColor: '#CFCFFC' }}
           textStyle={{ fontWeight: 'bold', color: 'white' }}
           onPress={handleIsInternetConnection}
         />
 
         <MyButton
           title="Net info"
-          btnStyle={{ margin: 10 }}
+          btnStyle={{ margin: 10, borderWidth: 1, borderColor: '#CFCFFC' }}
           textStyle={{ fontWeight: 'bold', color: 'white' }}
           onPress={() => alertJson('Network information', netinfo)}
         />
@@ -135,25 +134,30 @@ const styles = StyleSheet.create({
     marginTop: 50
   },
   scrollViewContainer: {
-    borderWidth: 1,
+    // borderWidth: 1,
     padding: 15,
     flex: 1,
     borderRadius: 30,
-    margin: 10,
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 0,
+    // margin: 10,
     marginTop: 20,
-    backgroundColor: vars.color.four
+    backgroundColor: '#353542'
   },
   inputIp: {
-    borderColor: 'gray',
     padding: 10,
     borderWidth: 0,
     fontSize: 40,
-    textAlign: 'center'
+    textAlign: 'center',
+    color: 'white'
   },
   inputIpBtn: {
     paddingHorizontal: 10,
     paddingVertical: 5,
-    borderRadius: 5
+    borderRadius: 5,
+    backgroundColor: '#83839C',
+    borderWidth: 1,
+    borderColor: '#CFCFFC'
   }
 })
 
