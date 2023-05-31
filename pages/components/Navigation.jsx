@@ -7,19 +7,19 @@ const Navigation = (props) => {
   const { pageList = [], defaultPage } = props
   const navigation = useNavigation()
   const [page, setpage] = useState(defaultPage)
+  const imageSrc = {
+    Color: require('../../assets/Color-icon.png'),
+    Customize: require('../../assets/Customize-icon.png'),
+    Setting: require('../../assets/Setting-icon.png')
+  }
 
   return (
     <View style={styles.container}>
       {pageList.map((val) => {
-        const imageSrc = {
-          Color: require('../../assets/Color-icon.png'),
-          Customize: require('../../assets/Customize-icon.png'),
-          Setting: require('../../assets/Setting-icon.png')
-        }
         return (
           <TouchableOpacity
             key={val}
-            style={page === val ? styles.existPage : ''}
+            style={page === val ? { opacity: 2 } : { opacity: 0.5 }}
             onPress={() => {
               setpage(val)
               navigation.navigate(val)
@@ -44,8 +44,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
     flexDirection: 'row',
-    height: 80,
-    borderRadius: 20,
+    height: 64,
+    borderRadius: 16,
     margin: 20,
     marginTop: 0
   },
@@ -55,10 +55,6 @@ const styles = StyleSheet.create({
     textTransform: 'capitalize',
     fontWeight: 'bold',
     padding: 20
-  },
-  existPage: {
-    backgroundColor: vars.color.one,
-    borderRadius: 20
   }
 })
 
