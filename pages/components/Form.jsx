@@ -40,9 +40,9 @@ const Form = ({ onSubmite, title, select = [], textInput = [] }) => {
         return (
           <View key={title} style={styles.inputContainer}>
             <Text style={styles.inputTitle}>{title}</Text>
-            <Text>:</Text>
+            <Text style={{ color: 'white' }}>:</Text>
             <TextInput
-              style={{ borderBottomWidth: 2, marginBottom: 10, width: 100 }}
+              style={{ borderBottomWidth: 2, marginBottom: 10, width: 100, color: 'white', borderColor: 'white' }}
               placeholder={placeholder}
               value={value}
               onChangeText={onChangeText}
@@ -52,7 +52,7 @@ const Form = ({ onSubmite, title, select = [], textInput = [] }) => {
         )
       })}
 
-      <MyButton title={'Submite'} onPress={onSubmite} btnStyle={{ marginTop: 10 }} />
+      <MyButton title={'Submite'} onPress={onSubmite} btnStyle={{ marginTop: 10, borderWidth: 1, borderColor: '#CFCFFC' }} />
     </View>
   )
 }
@@ -61,10 +61,18 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 16,
     fontWeight: 'bold',
-    marginBottom: 10
+    marginBottom: 10,
+    color: 'white'
   },
-  inputContainer: { flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', gap: 30, marginBottom: 10 },
-  inputTitle: { width: 70 }
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    gap: 30,
+    marginBottom: 10,
+    color: 'white'
+  },
+  inputTitle: { width: 70, color: 'white' }
 })
 
 export default Form
