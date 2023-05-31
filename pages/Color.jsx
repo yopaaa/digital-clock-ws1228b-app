@@ -1,7 +1,6 @@
 import { StyleSheet, View, ScrollView, Text } from 'react-native'
 import { useEffect, useState } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import vars from './components/Vars'
 import ColorPicker from '../lib/react-native-wheel-color-picker/ColorPicker'
 import MyButton from './components/MyButton'
 import axios from 'axios'
@@ -81,7 +80,7 @@ const Color = () => {
 
   return (
     <View style={styles.container}>
-      <Loading display={isLoading} />
+      <Loading display={isLoading} style={{ marginTop: 50 }} />
       <ScrollView style={styles.scrollViewContainer} showsVerticalScrollIndicator={false}>
         <View>
           <ColorPicker
@@ -96,8 +95,8 @@ const Color = () => {
           <HorizontalColorPicker colorList={palette} onSelectColor={(color) => setexistColor(color)} />
 
           <View style={styles.colorInformation}>
-            <Text>color : {existColor}</Text>
-            <Text>brightness : {`${Math.round(brightness / 2.5)}%`}</Text>
+            <Text style={{ color: 'white' }}>color : {existColor}</Text>
+            <Text style={{ color: 'white' }}>brightness : {`${Math.round(brightness / 2.5)}%`}</Text>
           </View>
 
           <Slider
@@ -110,7 +109,11 @@ const Color = () => {
             onValueChange={(val) => setbrightness(Math.round(val))}
           />
 
-          <MyButton title="Set color" onPress={handleChangeColor} btnStyle={{ marginTop: 20 }} />
+          <MyButton
+            title="Set color"
+            onPress={handleChangeColor}
+            btnStyle={{ marginTop: 20, borderWidth: 1, borderColor: '#CFCFFC' }}
+          />
         </View>
       </ScrollView>
     </View>
@@ -119,21 +122,22 @@ const Color = () => {
 
 const styles = StyleSheet.create({
   container: {
-    borderRadius: 30,
     overflow: 'hidden',
-    height: '95%',
-    // backgroundColor: 'blue',
-    margin: 10,
-    marginTop: 30
+    height: '100%',
+    // margin: 10,
+    // marginTop: 30,
+    backgroundColor: '#1C1C23'
   },
   scrollViewContainer: {
-    borderWidth: 1,
-    padding: 15,
+    // borderWidth: 1,
+    padding: 25,
     flex: 1,
     borderRadius: 30,
     // margin: 10,
-    // marginTop: 30,
-    backgroundColor: vars.color.four
+    // marginTop: 50,
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 0,
+    backgroundColor: '#353542'
   },
   colorInformation: {
     flex: 1,
