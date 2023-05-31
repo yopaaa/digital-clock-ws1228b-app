@@ -1,7 +1,6 @@
 import { StyleSheet, View, TouchableOpacity, Image } from 'react-native'
 import { useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
-import vars from './Vars'
 
 const Navigation = (props) => {
   const { pageList = [], defaultPage } = props
@@ -19,18 +18,13 @@ const Navigation = (props) => {
         return (
           <TouchableOpacity
             key={val}
-            style={page === val ? { opacity: 2 } : { opacity: 0.5 }}
+            style={page === val ? { opacity: 2, padding: 10 } : { opacity: 0.5, padding: 10 }}
             onPress={() => {
               setpage(val)
               navigation.navigate(val)
             }}
           >
-            {/* <Text style={styles.navText}>{val}</Text> */}
-            <Image
-              // source={{ uri: 'assets:/icon.png' }}
-              source={imageSrc[val]}
-              style={{ width: 40, height: 40 }}
-            />
+            <Image source={imageSrc[val]} style={{ width: 40, height: 40 }} />
           </TouchableOpacity>
         )
       })}
@@ -48,13 +42,6 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     margin: 20,
     marginTop: 0
-  },
-  navText: {
-    color: vars.color.four,
-    fontSize: 20,
-    textTransform: 'capitalize',
-    fontWeight: 'bold',
-    padding: 20
   }
 })
 
