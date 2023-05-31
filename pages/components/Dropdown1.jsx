@@ -34,7 +34,8 @@ const SelectDropdown = ({ defaultValue, data, onSelect, onPress, text }) => {
 const styles = StyleSheet.create({
   title: {
     fontSize: 15,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    color: 'white'
   },
   selectedItemContainer: {
     flex: 1,
@@ -48,7 +49,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     width: '50%',
-    height: 50
+    height: 50,
+    borderWidth: 1,
+    borderColor: '#CFCFFC'
   }
 })
 
