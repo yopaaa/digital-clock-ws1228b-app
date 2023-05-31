@@ -1,9 +1,7 @@
 import { TouchableOpacity, Text } from 'react-native'
-import vars from './Vars'
 
 export default function MyButton({ btnStyle, textStyle, onPress, title }) {
   const defaultBtnStyle = {
-    backgroundColor: vars.color.two,
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 10
@@ -11,7 +9,7 @@ export default function MyButton({ btnStyle, textStyle, onPress, title }) {
   const btnStyles = { ...defaultBtnStyle, ...btnStyle }
 
   const defaultTextStyle = {
-    color: vars.color.four,
+    color: 'white',
     fontSize: 16,
     textAlign: 'center',
     textTransform: 'capitalize'
