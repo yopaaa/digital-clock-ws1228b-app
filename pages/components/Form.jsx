@@ -36,13 +36,14 @@ const Form = ({ onSubmite, title, select = [], textInput = [] }) => {
       })}
 
       {textInput.map((val) => {
-        const { title, onChangeText, placeholder = 'input', value, keyboardType = 'number-pad' } = val
+        const { title, onChangeText, placeholder = 'input...', value, keyboardType = 'number-pad' } = val
         return (
           <View key={title} style={styles.inputContainer}>
             <Text style={styles.inputTitle}>{title}</Text>
             <Text style={{ color: 'white' }}>:</Text>
             <TextInput
               style={{ borderBottomWidth: 2, marginBottom: 10, width: 100, color: 'white', borderColor: 'white' }}
+              placeholderTextColor={'white'}
               placeholder={placeholder}
               value={value}
               onChangeText={onChangeText}
