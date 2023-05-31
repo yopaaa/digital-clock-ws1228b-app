@@ -1,6 +1,5 @@
 import { StyleSheet, View, ScrollView } from 'react-native'
 import { useEffect, useState } from 'react'
-import vars from './components/Vars'
 import axios from 'axios'
 import Loading from './components/Loading'
 import loadIpAddress from './function/loadIpAddress'
@@ -163,18 +162,19 @@ const Color = () => {
 
 const styles = StyleSheet.create({
   container: {
-    borderRadius: 30,
+    // borderRadius: 30,
     overflow: 'hidden',
-    height: '95%',
-    margin: 10,
-    marginTop: 30
+    height: '100%',
+    backgroundColor: '#353542'
   },
   scrollViewContainer: {
-    borderWidth: 1,
+    // borderWidth: 1,
     padding: 15,
     flex: 1,
-    borderRadius: 30,
-    backgroundColor: vars.color.four
+    margin: 10,
+    marginTop: 30
+    // borderRadius: 30
+    // backgroundColor: vars.color.four
   }
 })
 
