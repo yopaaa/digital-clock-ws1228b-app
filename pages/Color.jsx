@@ -1,4 +1,4 @@
-import { StyleSheet, View, ScrollView, Text } from 'react-native'
+import { StyleSheet, View, ScrollView, TextInput, Text } from 'react-native'
 import { useEffect, useState } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import ColorPicker from '../lib/react-native-wheel-color-picker/ColorPicker'
@@ -9,6 +9,8 @@ import HorizontalColorPicker from './components/HorizontalColorPicker'
 import alertJson from './function/alertJson'
 import Loading from './components/Loading'
 import loadIpAddress from './function/loadIpAddress'
+import Modal from 'react-native-modal'
+import SegmentClock from './SegmentClock'
 
 const Color = () => {
   const [ipAddress, setIpAddress] = useState('')
@@ -45,7 +47,7 @@ const Color = () => {
     }
 
     axios
-      .post(`http://${ipAddress}:3000/color/change`, data)
+      .post(`http://${ipAddress}:3000/color`, data)
       .then(async (val) => {
         if (!palette.includes(existColor)) {
           palette.unshift(existColor)
@@ -78,6 +80,8 @@ const Color = () => {
     loadIp()
   }, [])
 
+  const [isModalVisible, setModalVisible] = useState(false)
+
   return (
     <View style={styles.container}>
       <Loading display={isLoading} style={{ marginTop: 50 }} />
@@ -95,8 +99,16 @@ const Color = () => {
           <HorizontalColorPicker colorList={palette} onSelectColor={(color) => setexistColor(color)} />
 
           <View style={styles.colorInformation}>
-            <Text style={{ color: 'white' }}>color : {existColor}</Text>
-            <Text style={{ color: 'white' }}>brightness : {`${Math.round(brightness / 2.5)}%`}</Text>
+            <MyButton
+              title={`color : ${existColor}`}
+              textStyle={{ color: 'white', fontSize: 13 }}
+              onPress={() => setModalVisible(!isModalVisible)}
+            />
+            <MyButton
+              title={`brightness : ${Math.round(brightness / 2.5)}%`}
+              textStyle={{ color: 'white', fontSize: 13 }}
+              onPress={() => setModalVisible(!isModalVisible)}
+            />
           </View>
 
           <Slider
@@ -115,6 +127,51 @@ const Color = () => {
             btnStyle={{ marginTop: 20, borderWidth: 1, borderColor: '#CFCFFC' }}
           />
         </View>
+
+        <Modal isVisible={isModalVisible} animationIn={'fadeIn'} animationOut={'fadeOut'}>
+          <View
+            style={{
+              flex: 1,
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundColor: 'white',
+              borderRadius: 15,
+              maxHeight: 180
+            }}
+          >
+            <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+              <Text>Color : </Text>
+              <TextInput
+                style={{ borderBottomWidth: 1, color: 'black', borderColor: 'black', padding: 0 }}
+                placeholderTextColor={'black'}
+                placeholder={'placeholder'}
+                defaultValue={existColor}
+                onChangeText={(color) => (color.length === 5 ? setexistColor(color) : '')}
+                keyboardType={'default'}
+              />
+            </View>
+
+            <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+              <Text>Brightness : </Text>
+              <TextInput
+                style={{ borderBottomWidth: 1, color: 'black', borderColor: 'black', padding: 0 }}
+                placeholderTextColor={'black'}
+                placeholder={'placeholder'}
+                defaultValue={`${Math.round(brightness / 2.5)}`}
+                // onChangeText={(color) => (color.length === 5 ? setexistColor(color) : '')}
+                onChangeText={(val) => setbrightness(Math.round(Number(val) * 2.5))}
+                keyboardType={'default'}
+              />
+              <Text>%</Text>
+            </View>
+
+            <View style={{ flex: 1, flexDirection: 'row', gap: 50 }}>
+              <MyButton textStyle={{ color: 'black' }} title="Close" onPress={() => setModalVisible(!isModalVisible)} />
+            </View>
+          </View>
+        </Modal>
+
+        <SegmentClock color={existColor} />
       </ScrollView>
     </View>
   )
