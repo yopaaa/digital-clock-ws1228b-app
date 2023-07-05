@@ -8,6 +8,22 @@ import alertJson from './function/alertJson'
 import Loading from './components/Loading'
 import loadIpAddress from './function/loadIpAddress'
 
+const pingIPAddress = (ipAddress) => {
+  return new Promise((resolve, reject) => {
+    const startTime = new Date().getTime()
+
+    fetch(`http://${ipAddress}`, { method: 'HEAD', timeout: 5000 })
+      .then(() => {
+        const endTime = new Date().getTime()
+        const duration = endTime - startTime
+        resolve(duration)
+      })
+      .catch((error) => {
+        reject(error)
+      })
+  })
+}
+
 const Setting = () => {
   const [netinfo, setnetinfo] = useState('')
   const [isLoading, setisLoading] = useState(false)
@@ -15,15 +31,28 @@ const Setting = () => {
 
   const handleRestart = () => {
     setisLoading(true)
-    const data = {
-      temp: 'temp data'
-    }
 
     axios
-      .post(`http://${ipAddress}:3000/restart`, data)
+      .delete(`http://${ipAddress}:3000/restart`)
       .then((val) => {
         console.log(val.data)
-        alert(JSON.stringify(val.data.payload))
+        alert('Success!!!')
+      })
+      .catch((er) => {
+        console.log(er)
+        alert(`failed to send request http://${ipAddress}/\n` + er.message)
+      })
+      .finally(() => setisLoading(false))
+  }
+
+  const handleReset = () => {
+    setisLoading(true)
+
+    axios
+      .delete(`http://${ipAddress}:3000/reset`)
+      .then((val) => {
+        console.log(val.data)
+        alert('Success!!!')
       })
       .catch((er) => {
         console.log(er)
@@ -41,22 +70,26 @@ const Setting = () => {
       .finally(() => setisLoading(false))
   }
 
-  const handleVariable = () => {
+  const handleInfo = () => {
     setisLoading(true)
     axios
-      .get(`http://${ipAddress}:3000/variable`)
+      .post(`http://${ipAddress}:3000/info`, {})
       .then((val) => alertJson('Success', val.data))
       .catch((er) => alertJson('Failed', er.message))
       .finally(() => setisLoading(false))
   }
 
-  const handleIsInternetConnection = () => {
-    setisLoading(true)
-    axios
-      .get(`http://${ipAddress}:3000/isInternetConnection`)
-      .then((val) => alertJson('Success', val.data))
-      .catch((er) => alertJson('Failed', er.message))
-      .finally(() => setisLoading(false))
+  const handlesPing = () => {
+    const ipAddress = 'example.com' // Ganti dengan alamat IP yang ingin Anda ping
+    pingIPAddress(ipAddress)
+      .then((duration) => {
+        // setPingResult(duration)
+        console.log(duration)
+      })
+      .catch((error) => {
+        console.log('Error:', error)
+        // setPingResult(null)
+      })
   }
 
   useEffect(() => {
@@ -65,7 +98,7 @@ const Setting = () => {
       setIpAddress(ip)
     }
     loadIp()
-
+    handlesPing()
     NetInfo.fetch().then((state) => setnetinfo(state))
   }, [])
 
@@ -94,18 +127,25 @@ const Setting = () => {
 
       <ScrollView style={styles.scrollViewContainer} showsVerticalScrollIndicator={false}>
         <MyButton
-          title="Variable"
+          title="Scan devices"
           btnStyle={{ margin: 10, borderWidth: 1, borderColor: '#CFCFFC' }}
           textStyle={{ fontWeight: 'bold', color: 'white' }}
-          onPress={handleVariable}
+          onPress={handleInfo}
         />
 
         <MyButton
+          title="Devices info"
+          btnStyle={{ margin: 10, borderWidth: 1, borderColor: '#CFCFFC' }}
+          textStyle={{ fontWeight: 'bold', color: 'white' }}
+          onPress={handleInfo}
+        />
+
+        {/* <MyButton
           title="Test connections"
           btnStyle={{ margin: 10, borderWidth: 1, borderColor: '#CFCFFC' }}
           textStyle={{ fontWeight: 'bold', color: 'white' }}
           onPress={handleIsInternetConnection}
-        />
+        /> */}
 
         <MyButton
           title="Net info"
@@ -117,6 +157,13 @@ const Setting = () => {
         <MyButton
           title="Restart"
           onPress={handleRestart}
+          btnStyle={{ margin: 15, backgroundColor: 'red' }}
+          textStyle={{ fontWeight: 'bold', color: 'black' }}
+        />
+
+        <MyButton
+          title="Reset"
+          onPress={handleReset}
           btnStyle={{ margin: 15, backgroundColor: 'red' }}
           textStyle={{ fontWeight: 'bold', color: 'black' }}
         />
