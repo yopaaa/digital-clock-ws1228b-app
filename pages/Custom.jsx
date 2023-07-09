@@ -21,15 +21,17 @@ const Color = () => {
   const [mode, setmode] = useState('clock')
   const [limit, setlimit] = useState(120)
 
+  const [segmenMode1, setsegmenMode1] = useState('hour')
+  const [segmenMode2, setsegmenMode2] = useState('min')
+
   const handleChangeColorMode = () => {
     setisLoading(true)
     const data = {
-      mode: colorMode + '\0\0\0\0\0\0\0\0',
-      limit: 100
+      colorMode
     }
 
     axios
-      .post(`http://${ipAddress}:3000/color/mode`, data)
+      .post(`http://${ipAddress}:3000/mode`, data)
       .then((val) => {
         console.log(val.data)
         alert(JSON.stringify(val.data.payload))
@@ -48,7 +50,67 @@ const Color = () => {
     }
 
     axios
-      .post(`http://${ipAddress}:3000/timeformat`, data)
+      .post(`http://${ipAddress}:3000/time`, data)
+      .then((val) => {
+        console.log(val.data)
+        alert(JSON.stringify(val.data.payload))
+      })
+      .catch((er) => {
+        console.log(er)
+        alert(`failed to send request http://${ipAddress}/\n` + er.message)
+      })
+      .finally(() => setisLoading(false))
+  }
+
+  const handleChangesSagmenMode = () => {
+    setisLoading(true)
+    const data = {
+      segment1: segmenMode1,
+      segment2: segmenMode2
+    }
+
+    axios
+      .post(`http://${ipAddress}:3000/mode`, data)
+      .then((val) => {
+        console.log(val.data)
+        alert(JSON.stringify(val.data.payload))
+      })
+      .catch((er) => {
+        console.log(er)
+        alert(`failed to send request http://${ipAddress}/\n` + er.message)
+      })
+      .finally(() => setisLoading(false))
+  }
+
+  const handleSetMode = () => {
+    setisLoading(true)
+    const data = {
+      mode,
+      limit
+    }
+
+    axios
+      .post(`http://${ipAddress}:3000/mode`, data)
+      .then((val) => {
+        console.log(val.data)
+        alert(JSON.stringify(val.data.payload))
+      })
+      .catch((er) => {
+        console.log(er)
+        alert(`failed to send request http://${ipAddress}/\n` + er.message)
+      })
+      .finally(() => setisLoading(false))
+  }
+
+  const handleSetWIFISTA = () => {
+    setisLoading(true)
+    const data = {
+      STAssid: SSID,
+      STApassword: password
+    }
+
+    axios
+      .post(`http://${ipAddress}:3000/wifi`, data)
       .then((val) => {
         console.log(val.data)
         alert(JSON.stringify(val.data.payload))
@@ -84,6 +146,26 @@ const Color = () => {
         />
 
         <Dropdown
+          text={'Segmen1 mode'}
+          defaultValue={segmenMode1}
+          data={['hour', 'isdst', 'mday', 'min', 'mon', 'sec', 'wday', 'yday', 'year']}
+          onSelect={(selectedItem, index) => {
+            setsegmenMode1(selectedItem)
+          }}
+          onPress={handleChangesSagmenMode}
+        />
+
+        <Dropdown
+          text={'Segmen2 mode'}
+          defaultValue={segmenMode2}
+          data={['hour', 'isdst', 'mday', 'min', 'mon', 'sec', 'wday', 'yday', 'year']}
+          onSelect={(selectedItem, index) => {
+            setsegmenMode2(selectedItem)
+          }}
+          onPress={handleChangesSagmenMode}
+        />
+
+        <Dropdown
           text={'Time format'}
           defaultValue={timeformat}
           data={[12, 24]}
@@ -111,7 +193,7 @@ const Color = () => {
               onChangeText: (val) => setlimit(val)
             }
           ]}
-          onSubmite={() => console.log(mode + limit)}
+          onSubmite={handleSetMode}
         />
 
         <Form
@@ -151,7 +233,7 @@ const Color = () => {
               onChangeText: (val) => setpassword(val)
             }
           ]}
-          onSubmite={() => console.log(SSID + password)}
+          onSubmite={handleSetWIFISTA}
         />
 
         <View style={{ marginTop: 50 }}>{/* {BLANK} */}</View>
