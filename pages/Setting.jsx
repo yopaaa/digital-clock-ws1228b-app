@@ -7,27 +7,14 @@ import axios from 'axios'
 import alertJson from './function/alertJson'
 import Loading from './components/Loading'
 import loadIpAddress from './function/loadIpAddress'
-
-const pingIPAddress = (ipAddress) => {
-  return new Promise((resolve, reject) => {
-    const startTime = new Date().getTime()
-
-    fetch(`http://${ipAddress}`, { method: 'HEAD', timeout: 5000 })
-      .then(() => {
-        const endTime = new Date().getTime()
-        const duration = endTime - startTime
-        resolve(duration)
-      })
-      .catch((error) => {
-        reject(error)
-      })
-  })
-}
+import Modal from 'react-native-modal'
 
 const Setting = () => {
-  const [netinfo, setnetinfo] = useState('')
+  const [netinfo, setnetinfo] = useState()
   const [isLoading, setisLoading] = useState(false)
   const [ipAddress, setIpAddress] = useState('')
+  const [isModalVisible, setModalVisible] = useState(false)
+  const [ModalContent, setModalContent] = useState()
 
   const handleRestart = () => {
     setisLoading(true)
@@ -79,17 +66,40 @@ const Setting = () => {
       .finally(() => setisLoading(false))
   }
 
+  const pingIPAddress = (ipAddress) => {
+    return new Promise((resolve, reject) => {
+      const startTime = new Date().getTime()
+
+      fetch(`http://${ipAddress}`, { method: 'HEAD', timeout: 2000 })
+        .then(() => {
+          const endTime = new Date().getTime()
+          const duration = endTime - startTime
+          resolve(duration)
+        })
+        .catch((error) => {
+          reject(error)
+        })
+    })
+  }
+
   const handlesPing = () => {
-    const ipAddress = 'example.com' // Ganti dengan alamat IP yang ingin Anda ping
-    pingIPAddress(ipAddress)
-      .then((duration) => {
-        // setPingResult(duration)
-        console.log(duration)
-      })
-      .catch((error) => {
-        console.log('Error:', error)
-        // setPingResult(null)
-      })
+    setModalVisible(true)
+    setModalContent(<Loading display={true} />)
+    const splitIp = ipAddress.split('.')
+    const maxClient = 255 - netinfo.details.subnet.split('.')[3]
+    const existUseIpAddress = []
+    for (let i = 0; i < maxClient; i++) {
+      const targetIppaddress = `${splitIp[0]}.${splitIp[1]}.${splitIp[2]}.${i}`
+      pingIPAddress(targetIppaddress)
+        .then((duration) => {
+          existUseIpAddress.push([targetIppaddress, duration])
+        })
+        .catch((error) => error)
+    }
+
+    setTimeout(() => {
+      setModalContent(<Text>{JSON.stringify(existUseIpAddress, null, 5)}</Text>)
+    }, 10000)
   }
 
   useEffect(() => {
@@ -98,13 +108,36 @@ const Setting = () => {
       setIpAddress(ip)
     }
     loadIp()
-    handlesPing()
     NetInfo.fetch().then((state) => setnetinfo(state))
   }, [])
 
   return (
     <View style={{ flex: 1, backgroundColor: '#1C1C23' }}>
       <Loading display={isLoading} style={{ marginTop: 30 }} />
+      <Modal isVisible={isModalVisible} animationIn={'fadeIn'} animationOut={'slideOutDown'}>
+        <View
+          style={{
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: 'white',
+            borderRadius: 15,
+            minHeight: 100
+          }}
+        >
+          <View
+            style={{
+              alignItems: 'center',
+              justifyContent: 'center',
+              minHeight: 100
+            }}
+          >
+            {ModalContent}
+          </View>
+          <View>
+            <MyButton title="Close" textStyle={{ fontWeight: 'bold', color: 'black' }} onPress={() => setModalVisible(false)} />
+          </View>
+        </View>
+      </Modal>
 
       <View style={styles.inputIpContainer}>
         <Text style={{ color: 'white' }}>Click to set target IP address:</Text>
@@ -130,7 +163,7 @@ const Setting = () => {
           title="Scan devices"
           btnStyle={{ margin: 10, borderWidth: 1, borderColor: '#CFCFFC' }}
           textStyle={{ fontWeight: 'bold', color: 'white' }}
-          onPress={handleInfo}
+          onPress={handlesPing}
         />
 
         <MyButton
@@ -139,13 +172,6 @@ const Setting = () => {
           textStyle={{ fontWeight: 'bold', color: 'white' }}
           onPress={handleInfo}
         />
-
-        {/* <MyButton
-          title="Test connections"
-          btnStyle={{ margin: 10, borderWidth: 1, borderColor: '#CFCFFC' }}
-          textStyle={{ fontWeight: 'bold', color: 'white' }}
-          onPress={handleIsInternetConnection}
-        /> */}
 
         <MyButton
           title="Net info"
