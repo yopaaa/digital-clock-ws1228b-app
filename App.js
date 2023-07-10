@@ -19,6 +19,7 @@ export default function App() {
         <Stack.Screen name="Customize" component={Customize} options={{ headerShown: false }} />
 
         <Stack.Screen name="Setting" component={Setting} options={{ headerShown: false }} />
+
       </Stack.Navigator>
 
       <View style={{ backgroundColor: '#353542' }}>
