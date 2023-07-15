@@ -17,7 +17,7 @@ const Stack = createNativeStackNavigator()
 function Home() {
   const bottonSheetModalRef = useRef(null)
 
-  const snapPoints = ['10%', '80%']
+  const snapPoints = ['15%', '80%']
 
   function showSheet() {
     bottonSheetModalRef.current?.present()
@@ -36,7 +36,7 @@ function Home() {
             ref={bottonSheetModalRef}
             index={0}
             snapPoints={snapPoints}
-            backgroundStyle={{ borderRadius: 30, borderWidth: 1, borderColor: 'black' }}
+            backgroundStyle={{ borderRadius: 30, backgroundColor: '#333333' }}
           >
             <BottomSheetScrollView>
               <View>
@@ -53,7 +53,8 @@ function Home() {
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator
+      >
         <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
 
         <Stack.Screen name="Customize" component={Customize} options={{ headerShown: false }} />
