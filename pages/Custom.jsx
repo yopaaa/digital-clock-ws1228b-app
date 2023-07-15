@@ -247,7 +247,7 @@ const styles = StyleSheet.create({
     // borderRadius: 30,
     overflow: 'hidden',
     height: '100%',
-    backgroundColor: '#353542'
+    // backgroundColor: 'gray'
   },
   scrollViewContainer: {
     // borderWidth: 1,

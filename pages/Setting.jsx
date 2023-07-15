@@ -187,12 +187,12 @@ const Setting = () => {
           textStyle={{ fontWeight: 'bold', color: 'black' }}
         />
 
-        <MyButton
+        {/* <MyButton
           title="Reset"
           onPress={handleReset}
           btnStyle={{ margin: 15, backgroundColor: 'red' }}
           textStyle={{ fontWeight: 'bold', color: 'black' }}
-        />
+        /> */}
 
         <View style={{ marginTop: 50 }}>{/* {BLANK} */}</View>
       </ScrollView>
