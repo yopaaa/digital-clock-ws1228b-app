@@ -10,7 +10,7 @@ import alertJson from './function/alertJson'
 import Loading from './components/Loading'
 import loadIpAddress from './function/loadIpAddress'
 import Modal from 'react-native-modal'
-import SegmentClock from './SegmentClock'
+// import SegmentClock from './SegmentClock'
 
 const Color = () => {
   const [ipAddress, setIpAddress] = useState('')
@@ -86,7 +86,20 @@ const Color = () => {
     <View style={styles.container}>
       <Loading display={isLoading} style={{ marginTop: 50 }} />
       <ScrollView style={styles.scrollViewContainer} showsVerticalScrollIndicator={false}>
-        <View>
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: 'red',
+            // borderRadius: 20,
+            marginTop: 30,
+            height: 50,
+            overflow: 'hidden'
+            // margin: 10
+          }}
+        >
+          <Text>hello</Text>
+        </View>
+        <View style={{ padding: 25, paddingTop: 0 }}>
           <ColorPicker
             swatches={false}
             ref={(r) => (this.picker = r)}
@@ -128,51 +141,52 @@ const Color = () => {
           />
         </View>
 
-        <Modal isVisible={isModalVisible} animationIn={'fadeIn'} animationOut={'fadeOut'}>
-          <View
-            style={{
-              flex: 1,
-              alignItems: 'center',
-              justifyContent: 'center',
-              backgroundColor: 'white',
-              borderRadius: 15,
-              maxHeight: 180
-            }}
-          >
-            <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-              <Text>Color : </Text>
-              <TextInput
-                style={{ borderBottomWidth: 1, color: 'black', borderColor: 'black', padding: 0 }}
-                placeholderTextColor={'black'}
-                placeholder={'placeholder'}
-                defaultValue={existColor}
-                onChangeText={(color) => (color.length === 5 ? setexistColor(color) : '')}
-                keyboardType={'default'}
-              />
-            </View>
-
-            <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-              <Text>Brightness : </Text>
-              <TextInput
-                style={{ borderBottomWidth: 1, color: 'black', borderColor: 'black', padding: 0 }}
-                placeholderTextColor={'black'}
-                placeholder={'placeholder'}
-                defaultValue={`${Math.round(brightness / 2.5)}`}
-                // onChangeText={(color) => (color.length === 5 ? setexistColor(color) : '')}
-                onChangeText={(val) => setbrightness(Math.round(Number(val) * 2.5))}
-                keyboardType={'default'}
-              />
-              <Text>%</Text>
-            </View>
-
-            <View style={{ flex: 1, flexDirection: 'row', gap: 50 }}>
-              <MyButton textStyle={{ color: 'black' }} title="Close" onPress={() => setModalVisible(!isModalVisible)} />
-            </View>
-          </View>
-        </Modal>
-
-        <SegmentClock color={existColor} />
+        {/* <SegmentClock color={existColor} /> */}
       </ScrollView>
+
+      <Modal isVisible={isModalVisible} animationIn={'slideInUp'} animationOut={'fadeOut'} style={{ margin: 0 }}>
+        <View
+          style={{
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: 'white',
+            borderRadius: 15,
+            // maxHeight: 180,
+            marginTop: 100
+          }}
+        >
+          <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+            <Text>Color : </Text>
+            <TextInput
+              style={{ borderBottomWidth: 1, color: 'black', borderColor: 'black', padding: 0 }}
+              placeholderTextColor={'black'}
+              placeholder={'placeholder'}
+              defaultValue={existColor}
+              onChangeText={(color) => (color.length === 5 ? setexistColor(color) : '')}
+              keyboardType={'default'}
+            />
+          </View>
+
+          <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+            <Text>Brightness : </Text>
+            <TextInput
+              style={{ borderBottomWidth: 1, color: 'black', borderColor: 'black', padding: 0 }}
+              placeholderTextColor={'black'}
+              placeholder={'placeholder'}
+              defaultValue={`${Math.round(brightness / 2.5)}`}
+              // onChangeText={(color) => (color.length === 5 ? setexistColor(color) : '')}
+              onChangeText={(val) => setbrightness(Math.round(Number(val) * 2.5))}
+              keyboardType={'default'}
+            />
+            <Text>%</Text>
+          </View>
+
+          <View style={{ flex: 1, flexDirection: 'row', gap: 50 }}>
+            <MyButton textStyle={{ color: 'black' }} title="Close" onPress={() => setModalVisible(!isModalVisible)} />
+          </View>
+        </View>
+      </Modal>
     </View>
   )
 }
@@ -183,18 +197,18 @@ const styles = StyleSheet.create({
     height: '100%',
     // margin: 10,
     // marginTop: 30,
-    backgroundColor: '#1C1C23'
+    backgroundColor: 'gray'
   },
   scrollViewContainer: {
     // borderWidth: 1,
-    padding: 25,
+    // padding: 25,
     flex: 1,
     borderRadius: 30,
     // margin: 10,
     // marginTop: 50,
     borderBottomLeftRadius: 0,
-    borderBottomRightRadius: 0,
-    backgroundColor: '#353542'
+    borderBottomRightRadius: 0
+    // backgroundColor: '#353542'
   },
   colorInformation: {
     flex: 1,
@@ -202,7 +216,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
     width: '100%',
-    padding: 10
+    padding: 0
+    // paddingTop:0
   }
 })
 
