@@ -1,8 +1,8 @@
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import Setting from './pages/Setting'
-import BottomSheet from './pages/BottomSheet'
-import ScanQR from './pages/ScanQR'
+import Setting from './pages/SettingPage/Setting'
+import BottomSheet from './pages/HomePage/BottomSheet'
+import ScanQR from './pages/QRPage/ScanQR'
 
 const Stack = createNativeStackNavigator()
 
