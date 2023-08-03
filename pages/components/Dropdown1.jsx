@@ -1,19 +1,24 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { Image, StyleSheet, Text, View } from 'react-native'
 import Dropdown from 'react-native-select-dropdown'
 import MyButton from './MyButton'
 
 const SelectDropdown = ({ defaultValue, data, onSelect, onPress, text }) => {
   return (
-    <View>
+    <View style={{ borderBottomColor: 'white', borderBottomWidth: 1, paddingBottom: 15, marginBottom: 15 }}>
       <Text style={styles.title}>{text}</Text>
       <View style={styles.selectedItemContainer}>
         <Dropdown
           defaultValue={defaultValue}
           renderDropdownIcon={(isOpened) => {
             if (isOpened) {
-              return <Text>{'^'}</Text>
+              return (
+                <Image
+                  style={{ width: 16, height: 12, transform: [{ rotate: '90deg' }] }}
+                  source={require('../../assets/icon/triangle-icon.png')}
+                />
+              )
             }
-            return <Text>{'>'}</Text>
+            return <Image style={{ width: 16, height: 12 }} source={require('../../assets/icon/triangle-icon.png')} />
           }}
           dropdownIconPosition={'right'}
           defaultButtonText={defaultValue}
