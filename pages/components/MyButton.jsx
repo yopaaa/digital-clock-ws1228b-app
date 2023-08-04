@@ -11,8 +11,8 @@ export default function MyButton({ btnStyle, textStyle, onPress, title }) {
   const defaultTextStyle = {
     color: 'white',
     fontSize: 16,
-    textAlign: 'center',
-    textTransform: 'capitalize'
+    textAlign: 'center'
+    // textTransform: 'capitalize'
   }
   const textStyles = { ...defaultTextStyle, ...textStyle }
 
