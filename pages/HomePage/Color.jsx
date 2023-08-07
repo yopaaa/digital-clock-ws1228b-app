@@ -7,9 +7,9 @@ import ColorInformation from './ColorInformation'
 import MyButton from '../components/MyButton'
 import { useEffect, useState } from 'react'
 import Nav from './Nav'
-import Paho from 'paho-mqtt'
+import publish from '../function/publish'
 
-const Color = ({ isConnectedMqtt, clientMqtt, selectedDevices }) => {
+const Color = ({ isConnectedMqtt, clientMqtt, selectedDevicesID, subscribeMsg, onsetselectedDevicesID }) => {
   const [brightness, setbrightness] = useState(130)
   const [palette, setpalette] = useState(['#f26522'])
   const [existColor, setexistColor] = useState(palette[0])
@@ -38,9 +38,7 @@ const Color = ({ isConnectedMqtt, clientMqtt, selectedDevices }) => {
       brightness
     }
 
-    const message = new Paho.Message(JSON.stringify(data))
-    message.destinationName = selectedDevices + '-color'
-    clientMqtt.send(message)
+    publish(clientMqtt, selectedDevicesID + '-color', data)
 
     if (!palette.includes(existColor)) {
       palette.unshift(existColor)
@@ -65,10 +63,29 @@ const Color = ({ isConnectedMqtt, clientMqtt, selectedDevices }) => {
     })()
   }, [])
 
+  useEffect(() => {
+    const x = { topic: subscribeMsg.topic, payload: subscribeMsg.payloadString }
+
+    if (x.topic === selectedDevicesID + '-info-color') {
+      const color = JSON.parse(x.payload)
+      color.red = Math.max(0, Math.min(255, color.red))
+      color.green = Math.max(0, Math.min(255, color.green))
+      color.blue = Math.max(0, Math.min(255, color.blue))
+
+      const hex = ((color.red << 16) | (color.green << 8) | color.blue).toString(16).padStart(6, '0')
+      setexistColor(`#${hex.toUpperCase()}`)
+      setbrightness(color.brightness)
+    }
+  }, [subscribeMsg])
+
   return (
     <View style={styles.container}>
       <ScrollView style={styles.scrollViewContainer} showsVerticalScrollIndicator={false}>
-        <Nav isConnected={isConnectedMqtt} />
+        <Nav
+          isConnected={isConnectedMqtt}
+          selectedDevicesID={selectedDevicesID}
+          onsetselectedDevicesID={onsetselectedDevicesID}
+        />
         <View style={styles.colorPickerContainer}>
           <ColorPicker
             style={{ marginTop: -20 }}
@@ -85,7 +102,9 @@ const Color = ({ isConnectedMqtt, clientMqtt, selectedDevices }) => {
           <ColorInformation
             brightness={brightness}
             existColor={existColor}
-            onChangeColor={(color) => (color.length === 5 ? setexistColor(color) : '')}
+            onChangeColor={(color) => {
+              if (color.length > 6) setexistColor(color)
+            }}
             onChangeBrightness={(val) => setbrightness(Math.round(Number(val) * 2.5))}
           />
 
