@@ -7,12 +7,15 @@ import { useEffect, useState } from 'react'
 const windowWidth = Dimensions.get('window').width
 // const windowHeight = Dimensions.get('window').height
 
-const Nav = ({ isConnected }) => {
+const Nav = ({ isConnected, selectedDevicesID, onsetselectedDevicesID }) => {
   const [devicesList, setdevicesList] = useState([])
   const navigation = useNavigation()
 
   function onDevicesSelect(selected, index) {
-    AsyncStorage.setItem('selectedDevices', selected, (err) => console.log({ err }))
+    AsyncStorage.setItem('selectedDevices', selected, (err) => {
+      if (err) console.log({ err })
+    })
+    onsetselectedDevicesID(selected)
     console.log({ selected })
   }
 
@@ -21,7 +24,7 @@ const Nav = ({ isConnected }) => {
       ;(async () => {
         try {
           const devicesList = await AsyncStorage.getItem('devicesList')
-          console.log({ devicesList })
+          // console.log({ devicesList })
           if (devicesList !== null) {
             setdevicesList(JSON.parse(devicesList))
           }
@@ -30,11 +33,6 @@ const Nav = ({ isConnected }) => {
         }
       })()
     })
-
-    if (devicesList[devicesList.length - 1]?.type === 'ip') {
-      AsyncStorage.setItem('ipAddress', devicesList[devicesList.length - 1]?.value)
-    }
-
     return focusHandler
   }, [navigation])
 
@@ -50,7 +48,7 @@ const Nav = ({ isConnected }) => {
         </TouchableOpacity>
 
         <Dropdown
-          defaultValue={devicesList[devicesList.length - 1]?.value}
+          defaultValue={selectedDevicesID}
           renderDropdownIcon={(isOpened) => {
             if (isOpened) {
               return (
@@ -63,7 +61,7 @@ const Nav = ({ isConnected }) => {
             return <Image style={{ width: 16, height: 12 }} source={require('../../assets/icon/triangle-icon.png')} />
           }}
           dropdownIconPosition={'right'}
-          defaultButtonText={devicesList[devicesList.length - 1]?.value}
+          defaultButtonText={selectedDevicesID}
           buttonStyle={[styles.devicesSelectedContainer, { backgroundColor: isConnected === true ? '#29e810' : '#ff0000' }]}
           buttonTextStyle={{ fontSize: 15, fontWeight: 'bold' }}
           data={devicesList.map((value) => value?.value)}
