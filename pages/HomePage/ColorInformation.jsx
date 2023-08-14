@@ -37,7 +37,7 @@ const ColorInformation = ({ existColor, brightness, onChangeColor, onChangeBrigh
               style={{ borderBottomWidth: 1, color: 'white', borderColor: 'white', padding: 0 }}
               placeholderTextColor={'black'}
               defaultValue={existColor}
-              onChange={onChangeColor}
+              onChangeText={onChangeColor}
               keyboardType={'default'}
             />
           </View>
