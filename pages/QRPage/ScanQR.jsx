@@ -80,8 +80,7 @@ export default function App() {
         </View>
 
         <TextInput
-          style={styles.resultTextScan}
-          placeholderTextColor={'white'}
+          style={[styles.resultTextScan]}
           value={scanData}
           onChangeText={(text) => setScanData(text)}
           keyboardType={'default'}
