@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 import { useEffect, useState } from 'react'
 
 const SevenSegment = ({ value = 0, color = 'red' }) => {
@@ -110,14 +110,14 @@ const styles = StyleSheet.create({
   }
 })
 
-const SegmentClock = ({color = 'white'}) => {
+const SegmentClock = ({ color = 'white' }) => {
   const [Clock, setClock] = useState()
   useEffect(() => {
     const interval = setInterval(() => {
       const date = new Date()
       const hour = date.getHours().toString().split('')
       const minute = date.getMinutes().toString().split('')
-      const second = date.getSeconds().toString().split('')
+      // const second = date.getSeconds().toString().split('')
 
       setClock(
         <View style={{ transform: [{ scale: 0.8 }] }}>

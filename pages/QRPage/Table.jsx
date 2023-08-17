@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useEffect, useState } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
-function Table({ data = [{ value: 'null', type: 'null' }] }) {
+function Table({ data = [{ value: 'null', title: 'null' }] }) {
   const [content, setContent] = useState([])
   const [isrefresh, setisrefresh] = useState()
 
@@ -28,7 +28,8 @@ function Table({ data = [{ value: 'null', type: 'null' }] }) {
                 style={[
                   styles.rowText,
                   {
-                    width: 200
+                    width: 200,
+                    overflow: 'hidden'
                   }
                 ]}
               >
