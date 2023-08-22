@@ -103,10 +103,8 @@ export default function App() {
                 .post('http://192.168.15.1:3000/wifi', data)
                 .then((data) => {
                   Alert.alert('Success', JSON.stringify(data.data, ' ', '  '))
-                  // alert()
                 })
                 .catch((er) => {
-                  // Alert.alert('Success', 'failed with erroe' + er)
                   Alert.alert(
                     'Error',
                     `Failed with errors: ${er.message}`,
@@ -136,22 +134,22 @@ export default function App() {
             axios
               .get('http://192.168.15.1:3000/')
               .then((data) => {
-                Alert.alert('Success', data, [
-                  // {
-                  //   text: 'Save',
-                  //   style: 'default',
-                  //   onPress: () => {
-                  //     const index = devicesList.findIndex((item) => item.value === data)
-                  //     const data = [...devicesList]
-                  //     if (index !== -1) {
-                  //       data.splice(index, 1, { value: data })
-                  //     } else {
-                  //       data.push({ value: data })
-                  //     }
-                  //     AsyncStorage.setItem('devicesList', JSON.stringify(data), (err) => console.log({ err }))
-                  //     setdevicesList(data)
-                  //   }
-                  // }
+                Alert.alert('Success', data.data, [
+                  {
+                    text: 'Save',
+                    style: 'default',
+                    onPress: () => {
+                      const index = devicesList.findIndex((item) => item.value === data)
+                      const data = [...devicesList]
+                      if (index !== -1) {
+                        data.splice(index, 1, { value: data })
+                      } else {
+                        data.push({ value: data })
+                      }
+                      AsyncStorage.setItem('devicesList', JSON.stringify(data), (err) => console.log({ err }))
+                      setdevicesList(data)
+                    }
+                  }
                 ])
               })
               .catch((er) => {
@@ -181,7 +179,7 @@ export default function App() {
             axios
               .get('http://192.168.15.1:3000/ping')
               .then((data) => {
-                Alert.alert('Success', data)
+                Alert.alert('Success', data.data)
               })
               .catch((er) => {
                 Alert.alert(
@@ -210,7 +208,7 @@ export default function App() {
             axios
               .post('http://192.168.15.1:3000/wifi', {})
               .then((data) => {
-                Alert.alert('Success', JSON.stringify(data.data.payload, ' ', '\n'))
+                Alert.alert('Success', JSON.stringify(data.data, ' ', '  '))
               })
               .catch((er) => {
                 Alert.alert(
